@@ -1,5 +1,5 @@
 import { HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
-import { Task, TaskStatus } from "./task.model";
+import { CreateTaskDto, Task, TaskStatus } from "./task.model";
 import { HttpException } from "@nestjs/common/exceptions/http.exception";
 
 @Injectable()
@@ -18,8 +18,8 @@ export class TasksService {
   }
 
   createTask(task: Task): Task {
-    if (!task.title || !task.description)
-      throw new HttpException("Title or description not provided", HttpStatus.BAD_REQUEST);
+    // if (!task.title || !task.description)
+    //   throw new HttpException("Title or description not provided", HttpStatus.BAD_REQUEST);
     task.id = (++this.id).toString();
     task.status ??= TaskStatus.PENDING;
     this.tasks.push(task);
@@ -27,7 +27,7 @@ export class TasksService {
   }
 
   updateTask(id: string, update: Task): Task {
-    if (!update.title && !update.description && !update.status)
+    if (!Object.keys(update).length)
       throw new HttpException("No fields to update", HttpStatus.BAD_REQUEST);
     const index = this._getTaskDBIndex(id);
     if (index === -1) throw new NotFoundException();
