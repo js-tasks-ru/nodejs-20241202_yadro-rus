@@ -18,8 +18,6 @@ export class TasksService {
   }
 
   createTask(task: Task): Task {
-    // if (!task.title || !task.description)
-    //   throw new HttpException("Title or description not provided", HttpStatus.BAD_REQUEST);
     task.id = (++this.id).toString();
     task.status ??= TaskStatus.PENDING;
     this.tasks.push(task);
