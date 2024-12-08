@@ -14,7 +14,7 @@ export interface Task {
   status: TaskStatus;
 }
 
-export type sortByValues = "title" | "description";
+export type sortByValues = "title" | "description" | "status";
 
 export class TaskQueryDto {
   @IsOptional()
@@ -32,6 +32,6 @@ export class TaskQueryDto {
   limit: number;
 
   @IsOptional()
-  @IsIn(["title", "description"])
+  @IsIn(["title", "description", "status"])
   sortBy: sortByValues;
 }
