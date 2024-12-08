@@ -38,10 +38,7 @@ export class TasksService {
 
   getFilteredTasks(query: TaskQueryDto): Task[] {
     const { status, page, limit, sortBy } = query;
-    let result = this.tasks;
-    if (status) {
-      result = this.tasks.filter((task: Task) => task.status === status);
-    }
+    let result = status ? this.tasks.filter((task: Task) => task.status === status) : this.tasks;
     if (page || limit) {
       result = this.makePagination(result, page, limit);
     }
