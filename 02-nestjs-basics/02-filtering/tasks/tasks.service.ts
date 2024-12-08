@@ -37,7 +37,7 @@ export class TasksService {
   ];
 
   getFilteredTasks(query: TaskQueryDto): Task[] {
-    let { status, page, limit, sortBy } = query;
+    const { status, page, limit, sortBy } = query;
     let result = this.tasks;
     if (status) {
       result = this.tasks.filter((task: Task) => task.status === status);
