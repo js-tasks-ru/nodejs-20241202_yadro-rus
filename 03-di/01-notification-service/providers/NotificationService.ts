@@ -1,10 +1,11 @@
-import { createTransport } from "nodemailer" ;
+import { createTransport, Transporter } from "nodemailer" ;
 import { Injectable } from "@nestjs/common";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 
 @Injectable()
 export class NotificationService {
 
-  private transporter: any;
+  private transporter: Transporter<SMTPTransport.SentMessageInfo, SMTPTransport.Options>;
 
   constructor() {
     this.transporter = createTransport({
@@ -29,7 +30,7 @@ export class NotificationService {
       }).then(() => {
         resolve(true);
       }).catch((e) => {
-        console.error(e);
+        console.error(e); // can be added to logger
         resolve(false);
       });
     });
