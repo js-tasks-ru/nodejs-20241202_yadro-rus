@@ -1,5 +1,6 @@
 import { IsString, IsNotEmpty, IsIn, IsNumber } from "class-validator";
 import { OmitType, PickType } from "@nestjs/swagger";
+import { Type } from "class-transformer";
 
 export enum TaskStatus {
   Pending = "pending",
@@ -25,6 +26,7 @@ export class Task {
   status: TaskStatus;
 
   @IsNumber()
+  @Type(()=> Number)
   assignedTo?: number;
 }
 
