@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { CreateTaskDto, Task, TaskStatus, UpdateTaskDto } from "./task.model";
 import { NotificationService } from "../providers/NotificationService";
 import { UsersService } from "../users/users.service";
-import { IsEmail } from "class-validator/types/decorator/string/IsEmail";
 
 @Injectable()
 export class TasksService {
@@ -25,9 +24,6 @@ export class TasksService {
     };
     this.tasks.push(task);
 
-    // if(IsEmail(user.email)){
-    //
-    // }
     await this.notificationService.sendEmail(user.email, "Новая задача", `Вы назначены ответственным за задачу: "${title}"`);
 
     return task;

@@ -1,13 +1,6 @@
 import { createTransport } from "nodemailer" ;
 import { Injectable } from "@nestjs/common";
 
-import { IsEmail } from "class-validator";
-
-/*export class CreateUserDto {
-  @IsEmail()
-  email: string;
-}*/
-
 @Injectable()
 export class NotificationService {
 
@@ -25,7 +18,7 @@ export class NotificationService {
     });
   }
 
-  async sendEmail(to: string, subject: string, content: string) {
+  sendEmail(to: string, subject: string, content: string) {
     return new Promise((resolve, reject) => {
       this.transporter.sendMail({
         from: "Super User",
@@ -42,8 +35,10 @@ export class NotificationService {
     });
   }
 
-  async sendSMS(to: string, text: string) {
+  // NOTE: https://www.courier.com/guides/nodejs-send-sms
+  sendSMS(to: string, text: string) {
     return new Promise((resolve, reject) => {
+      console.log(`SMS: ${text}, отправленна на номер: ${to}`);
       setTimeout(resolve, 2000);
     });
   }
