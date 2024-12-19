@@ -2,6 +2,11 @@ import { createTransport, Transporter } from "nodemailer" ;
 import { Injectable } from "@nestjs/common";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
 
+/*
+* Синглтон обеспечен благодаря импортам модулей и экспортом ресурсов внутри модуля.
+  Если прокидывать сервис напрямую в разные модули, то будут создаваться свои экземпляры в рамках модуля.
+* Injectable тут не имеет значения ?
+* */
 @Injectable()
 export class NotificationService {
 
