@@ -5,21 +5,25 @@ import {
   Get,
   Param,
   Patch,
-  Post, UseGuards
+  Post, UseGuards, UseInterceptors
 } from "@nestjs/common";
 import { TasksService } from "./tasks.service";
 import { CreateTaskDto, UpdateTaskDto } from "./task.model";
 import { ParseIntPipe } from "../pipes/parse-int.pipe";
 import { RolesGuard } from "../guards/roles.guard";
 import { Roles } from "../guards/roles.decorator";
+import { ApiVersionInterceptor } from "../interceptors/api-version.interceptor";
+
 
 @Controller("tasks")
+@UseInterceptors(ApiVersionInterceptor)
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {
   }
 
   @Get()
-  getAllTasks() {
+  async getAllTasks() {
+    // await new Promise((r)=> setTimeout(r,5000));
     return this.tasksService.getAllTasks();
   }
 
