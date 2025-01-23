@@ -4,19 +4,26 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Patch,
-  Post,
+  Post, UseGuards, UseInterceptors
 } from "@nestjs/common";
 import { TasksService } from "./tasks.service";
 import { CreateTaskDto, UpdateTaskDto } from "./task.model";
+import { ParseIntPipe } from "../pipes/parse-int.pipe";
+import { RolesGuard } from "../guards/roles.guard";
+import { Roles } from "../guards/roles.decorator";
+import { ApiVersionInterceptor } from "../interceptors/api-version.interceptor";
+
 
 @Controller("tasks")
+@UseInterceptors(ApiVersionInterceptor)
 export class TasksController {
-  constructor(private readonly tasksService: TasksService) {}
+  constructor(private readonly tasksService: TasksService) {
+  }
 
   @Get()
-  getAllTasks() {
+  async getAllTasks() {
+    // await new Promise((r)=> setTimeout(r,5000));
     return this.tasksService.getAllTasks();
   }
 
@@ -26,6 +33,8 @@ export class TasksController {
   }
 
   @Post()
+  @UseGuards(RolesGuard)
+  @Roles(["admin", "superAdmin"])
   createTask(@Body() task: CreateTaskDto) {
     return this.tasksService.createTask(task);
   }
@@ -33,12 +42,14 @@ export class TasksController {
   @Patch(":id")
   updateTask(
     @Param("id", ParseIntPipe) id: number,
-    @Body() task: UpdateTaskDto,
+    @Body() task: UpdateTaskDto
   ) {
     return this.tasksService.updateTask(id, task);
   }
 
   @Delete(":id")
+  @UseGuards(RolesGuard)
+  @Roles(["admin", "superAdmin"])
   deleteTask(@Param("id", ParseIntPipe) id: number) {
     return this.tasksService.deleteTask(id);
   }
