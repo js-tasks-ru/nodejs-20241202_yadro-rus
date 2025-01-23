@@ -4,6 +4,7 @@ import { UpdateTaskDto } from "./dto/update-task.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Task } from "./entities/task.entity";
 import { Repository } from "typeorm";
+import { GetTasksDto } from "./dto/get-tasks.dto";
 
 @Injectable()
 export class TasksService {
@@ -18,8 +19,20 @@ export class TasksService {
     return task;
   }
 
-  async findAll() {
+  async findAll(getTasksDto: GetTasksDto) {
+    const { page, limit } = getTasksDto;
+    if (page || limit) {
+      return this.findAllWithPagination(page, limit);
+    }
     return this.taskRepository.find();
+  }
+
+  private findAllWithPagination(page: number = 1, limit: number = 1) {
+    const start = (page - 1) * limit;
+    return this.taskRepository.find({
+      skip: start,
+      take: limit
+    });
   }
 
   async findOne(id: number) {
@@ -37,8 +50,11 @@ export class TasksService {
     return task;
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: number): Promise<any> {
     const task = await this.findOne(id);
     await this.taskRepository.remove(task);
+    return {
+      "message": `Task ${id} deleted successfully `
+    };
   }
 }
